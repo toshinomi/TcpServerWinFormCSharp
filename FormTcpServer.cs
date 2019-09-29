@@ -91,12 +91,12 @@ namespace TcpServerWinFormCSharp
                 m_tcpListener.Start();
 
                 Invoke(new Action<string>(SetTextStatus), "Server started.");
+
                 TcpClient client = m_tcpListener.AcceptTcpClient();
 
                 while (client.Connected)
                 {
                     NetworkStream networkStream = client.GetStream();
-
                     byte[] aryData = new byte[4096];
                     int nSize = networkStream.Read(aryData, 0, aryData.Length);
                     string strGetText = System.Text.Encoding.Default.GetString(aryData, 0, nSize);
@@ -105,7 +105,7 @@ namespace TcpServerWinFormCSharp
             }
             catch(Exception)
             {
-                Invoke(new Action<string>(SetTextStatus), "Server terminated.");
+                Invoke(new Action<string>(SetTextStatus), "Server terminated abnormally.");
 
                 return;
             }
@@ -134,6 +134,7 @@ namespace TcpServerWinFormCSharp
 
         public void OnBtnClickStop(object sender, EventArgs e)
         {
+            m_bEnd = true;
             m_tcpListener.Stop();
 
             return;
