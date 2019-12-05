@@ -16,7 +16,7 @@ namespace TcpServerWinFormCSharp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormTcpServer());
+            Application.Run(new FormMain());
         }
     }
 }

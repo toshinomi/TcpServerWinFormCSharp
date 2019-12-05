@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace TcpServerWinFormCSharp
 {
-    public partial class FormTcpServer : Form
+    public partial class FormMain : Form
     {
         private Thread m_thread;
         private TcpListener m_tcpListener;
@@ -51,14 +51,14 @@ namespace TcpServerWinFormCSharp
             get { return m_bEnd; }
         }
 
-        public FormTcpServer()
+        public FormMain()
         {
             InitializeComponent();
 
             Init();
         }
 
-        ~FormTcpServer()
+        ~FormMain()
         {
         }
 

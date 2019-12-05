@@ -1,6 +1,6 @@
 ﻿namespace TcpServerWinFormCSharp
 {
-    partial class FormTcpServer
+    partial class FormMain
     {
         /// <summary>
         /// 必要なデザイナー変数です。
