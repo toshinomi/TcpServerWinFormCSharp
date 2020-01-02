@@ -146,7 +146,12 @@ namespace TcpServerWinFormCSharp
             }
             catch(Exception)
             {
-                Invoke(new Action<string>(SetTextStatus), "Server terminated abnormally.");
+                string strText = "Server terminated.";
+                if (!m_bEnd)
+                {
+                    strText = "Server terminated abnormally.";
+                }
+                Invoke(new Action<string>(SetTextStatus), strText);
 
                 return;
             }
