@@ -13,6 +13,9 @@ using System.Windows.Forms;
 
 namespace TcpServerWinFormCSharp
 {
+    /// <summary>
+    /// MainFormのロジック
+    /// </summary>
     public partial class FormMain : Form
     {
         private Thread m_thread;
@@ -21,36 +24,54 @@ namespace TcpServerWinFormCSharp
         private int m_nPort;
         private bool m_bEnd;
 
+        /// <summary>
+        /// スレッド
+        /// </summary>
         public Thread Thread
         {
             set { m_thread = value; }
             get { return m_thread; }
         }
 
+        /// <summary>
+        /// TCPリスナー
+        /// </summary>
         public TcpListener TcpListener
         {
             set { m_tcpListener = value; }
             get { return m_tcpListener; }
         }
 
+        /// <summary>
+        /// IPアドレス
+        /// </summary>
         public string IpAddress
         {
             set { m_strIpAddress = value; }
             get { return m_strIpAddress; }
         }
 
+        /// <summary>
+        /// ポート
+        /// </summary>
         public int Port
         {
             set { m_nPort = value; }
             get { return m_nPort; }
         }
 
+        /// <summary>
+        /// 終了
+        /// </summary>
         public bool End
         {
             set { m_bEnd = value; }
             get { return m_bEnd; }
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public FormMain()
         {
             InitializeComponent();
@@ -58,10 +79,16 @@ namespace TcpServerWinFormCSharp
             Init();
         }
 
+        /// <summary>
+        /// デスクトラクタ
+        /// </summary>
         ~FormMain()
         {
         }
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public void Init()
         {
             m_thread = null;
@@ -74,6 +101,11 @@ namespace TcpServerWinFormCSharp
             textBoxPort.Text = m_nPort.ToString();
         }
 
+        /// <summary>
+        /// スタートボタンのクリックイベント
+        /// </summary>
+        /// <param name="sender">オブジェクト</param>
+        /// <param name="e">イベントのデータ</param>
         private void OnBtnClickStart(object sender, EventArgs e)
         {
             m_strIpAddress = textBoxIpAddress.Text.ToString();
@@ -83,6 +115,9 @@ namespace TcpServerWinFormCSharp
             m_thread.Start();
         }
 
+        /// <summary>
+        /// データリスナー
+        /// </summary>
         public void DataListener()
         {
             try
@@ -96,12 +131,18 @@ namespace TcpServerWinFormCSharp
 
                 while (client.Connected)
                 {
+                    if (m_bEnd)
+                    {
+                        break;
+                    }
+
                     NetworkStream networkStream = client.GetStream();
                     byte[] aryData = new byte[4096];
                     int nSize = networkStream.Read(aryData, 0, aryData.Length);
                     string strGetText = System.Text.Encoding.Default.GetString(aryData, 0, nSize);
                     Invoke(new Action<string>(SetTextRcvData), strGetText);
                 }
+                Invoke(new Action<string>(SetTextStatus), "Server terminated.");
             }
             catch(Exception)
             {
@@ -111,6 +152,10 @@ namespace TcpServerWinFormCSharp
             }
         }
 
+        /// <summary>
+        /// ステータス表示のテキストボックス設定
+        /// </summary>
+        /// <param name="_strText">表示文字列</param>
         public void SetTextStatus(string _strText)
         {
             textBoxStatus.Text = _strText.ToString();
@@ -118,6 +163,10 @@ namespace TcpServerWinFormCSharp
             return;
         }
 
+        /// <summary>
+        /// データ受信表示のテキストボックス設定
+        /// </summary>
+        /// <param name="_strText">表示文字列</param>
         public void SetTextRcvData(string _strText)
         {
             textBoxRcvData.Text = _strText.ToString() + "\n";
@@ -125,6 +174,11 @@ namespace TcpServerWinFormCSharp
             return;
         }
 
+        /// <summary>
+        /// クリアボタンのクリックイベント
+        /// </summary>
+        /// <param name="sender">オブジェクト</param>
+        /// <param name="e">イベントのデータ</param>
         public void OnBtnClickClear(object sender, EventArgs e)
         {
             textBoxRcvData.Text = "";
@@ -132,6 +186,11 @@ namespace TcpServerWinFormCSharp
             return;
         }
 
+        /// <summary>
+        /// ストップボタンのクリックイベント
+        /// </summary>
+        /// <param name="sender">オブジェクト</param>
+        /// <param name="e">イベントのデータ</param>
         public void OnBtnClickStop(object sender, EventArgs e)
         {
             m_bEnd = true;
